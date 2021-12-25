@@ -42,12 +42,7 @@ class TestAccount:
             assert account2 < account
 
     def test_json_import_export(self) -> None:
-        account_id = uuid4()
-        account = Account(
-            id_=account_id,
-            currency="KZT",
-            balance=Decimal(10),
-        )
+        account = Account.random()
 
         json_account = account.to_json()
         assert json.loads(json_account) == {
@@ -64,6 +59,11 @@ class TestAccount:
         assert account.id_ == UUID("4dc2e5e3-671f-4efb-8a07-bbb71147a335")
         assert account.balance == Decimal(10)
         assert account.currency == "KZT"
+
+    def test_to_json_from_json(self) -> None:
+        account = Account.random()
+        account2 = Account.from_json(account.to_json())
+        assert account2 == account
 
 
 
