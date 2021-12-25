@@ -35,7 +35,7 @@ class Account:
         assert "id" in obj
         assert "currency" in obj
         assert "balance" in obj
-        return Account(
+        return cls(
             id_=UUID(obj["id"]),
             currency=obj["currency"],
             balance=Decimal(obj["balance"]),
@@ -43,7 +43,7 @@ class Account:
 
     @classmethod
     def random(cls) -> "Account":
-        return Account(
+        return cls(
             id_=uuid4(),
             currency="KZT",
             balance=Decimal(random.randint(1, 1000)),
