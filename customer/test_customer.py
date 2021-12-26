@@ -1,39 +1,36 @@
 from decimal import Decimal
 from uuid import uuid4
-import pytest
 
 from account.account import Account
 from customer.customer import Customer
-import mypy
 
 
 class TestCustomer:
     def test_two_plus_two(self) -> None:
         assert 2 + 2 == 4
 
-    def test_customer_create(self):
+    def test_customer_create(self) -> None:
         customer_id = uuid4()
         customer = Customer(
             id_=customer_id,
-            first_name="Kaisar",
-            last_name="Sarymsakov",
-            age=23,
-            accounts=[],
-        )
-
-        customer2 = Customer(
-            id_=customer_id,
-            first_name="Kaisar",
-            last_name="Sarymsakov",
-            age=23,
+            first_name="Timur",
+            last_name="Bakibayev",
+            age=39,
             accounts=[],
         )
 
         assert customer.id_ == customer_id
-        assert customer.first_name == "Kaisar"
-        assert customer.last_name == "Sarymsakov"
-
+        assert customer.first_name == "Timur"
+        assert customer.last_name == "Bakibayev"
         assert isinstance(customer, Customer)
+
+        customer2 = Customer(
+            id_=customer_id,
+            first_name="Timur",
+            last_name="Bakibayev",
+            age=39,
+            accounts=[],
+        )
 
         assert customer == customer2
         assert id(customer) != id(customer2)
@@ -54,4 +51,4 @@ class TestCustomer:
             balance=Decimal(500),
         )
 
-
+        # TODO: complete test
