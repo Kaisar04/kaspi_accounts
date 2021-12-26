@@ -11,15 +11,16 @@ from database.database import ObjectNotFound
 from database.implementations.postgres_db import AccountDatabasePostgres
 from database.implementations.ram import AccountDatabaseRAM
 
-dbname: str = os.environ.get("pg_dbname", "")
+dbname: str = "postgres"
 if dbname == "":
     database = AccountDatabaseRAM()
     print("Using RAM")
 else:
-    port:int = 25060
-    user:str = os.environ.get("pg_user")
-    password:str = os.environ.get("pg_password")
-    host:str = "db-postgresql-nyc3-99638-do-user-4060406-0.b.db.ondigitalocean.com"
+    port: int = 5432
+    user: str = "postgres"
+    print(user)
+    password: str = "10011000Ks"
+    host: str = "localhost"
     connection_str = f"dbname={dbname} port={port} user={user} password={password} host={host}"
     database = AccountDatabasePostgres(connection=connection_str)
 

@@ -10,7 +10,7 @@ from database.implementations.ram import AccountDatabaseRAM
 
 @pytest.fixture()
 def connection_string(request: Any) -> str:
-    return "dbname=defaultdb port=25060 user=doadmin password=e5Y6G88wWs0EGS5e host=db-postgresql-nyc3-99638-do-user-4060406-0.b.db.ondigitalocean.com"
+    return "dbname=postgres port=5432 user=postgres password=10011000Ks host=localhost"
 
 
 @pytest.fixture(params=[AccountDatabasePandas, AccountDatabaseRAM, AccountDatabasePostgres])

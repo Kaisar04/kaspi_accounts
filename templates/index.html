@@ -12,7 +12,7 @@
     <tr onclick="window.location='/accounts/{{account.id_}}'">
         <td>{{account.id_}}</td>
         <td
-            {% if account.balance < 200 %}
+            {% if account.balance < 300 %}
                 class = "table-danger"
             {% endif %}
         >{{account.balance}}</td>
@@ -20,5 +20,15 @@
     </tr>
     {% endfor %}
 </table>
+<h3>Открыть новый счёт</h3>
+<form method="POST">
+       <select >
+        <option selected="selected" disabled>Выберите валюту:</option>
+        <option value="KZT">KZT</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+       </select>
+       <input type="submit" value="Добавить счёт">
+</form>
 </body>
 </html>
