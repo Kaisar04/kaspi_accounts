@@ -14,7 +14,7 @@ class AccountDatabasePostgres(AccountDatabase):
         self.conn = psycopg2.connect(connection)
         cur = self.conn.cursor()
         cur.execute("""
-        CREATE TABLE IF NOT EXISTS accounts (
+        CREATE TABLE IF NOT EXISTS accounts_kaisar (
             id varchar primary key ,
             currency varchar ,
             balance decimal 
@@ -32,7 +32,7 @@ class AccountDatabasePostgres(AccountDatabase):
 
         cur = self.conn.cursor()
         cur.execute("""
-                UPDATE accounts SET currency = %s, balance = %s WHERE id = %s;
+                UPDATE accounts_kaisar SET currency = %s, balance = %s WHERE id = %s;
         """, (account.currency, account.balance, str(account.id_)))
         rows_count = cur.rowcount
         self.conn.commit()
@@ -41,18 +41,18 @@ class AccountDatabasePostgres(AccountDatabase):
         if rows_count == 0:
             cur = self.conn.cursor()
             cur.execute("""
-                    INSERT INTO accounts (id, currency, balance) VALUES (%s, %s, %s);
+                    INSERT INTO accounts_kaisar (id, currency, balance) VALUES (%s, %s, %s);
                     """, (str(account.id_), account.currency, account.balance))
             self.conn.commit()
 
     def clear_all(self) -> None:
         cur = self.conn.cursor()
-        cur.execute("DELETE FROM accounts;")
+        cur.execute("DELETE FROM accounts_kaisar;")
         self.conn.commit()
 
     def get_objects(self) -> List[Account]:
         cur = self.conn.cursor()
-        cur.execute("SELECT * FROM accounts;")
+        cur.execute("SELECT * FROM accounts_kaisar;")
         data = cur.fetchall()
         cols = [x[0] for x in cur.description]
         df = pd.DataFrame(data, columns=cols)
@@ -67,7 +67,7 @@ class AccountDatabasePostgres(AccountDatabase):
 
     def get_object(self, id_: UUID) -> Optional[Account]:
         cur = self.conn.cursor()
-        cur.execute("SELECT * FROM accounts WHERE id = %s;", (str(id_),))
+        cur.execute("SELECT * FROM accounts_kaisar WHERE id = %s;", (str(id_),))
         print("Trying to find", str(id_))
         data = cur.fetchall()
         if len(data) == 0:
