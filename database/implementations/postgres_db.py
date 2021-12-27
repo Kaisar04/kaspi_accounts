@@ -50,6 +50,14 @@ class AccountDatabasePostgres(AccountDatabase):
         cur.execute("DELETE FROM accounts_kaisar;")
         self.conn.commit()
 
+    def max_value(self):
+        cur = self.conn.cursor()
+        cur.execute("SELECT MAX(balance) FROM accounts_kaisar;")
+        data = cur.fetchall()
+        return data[0][0]
+
+
+
     def get_objects(self) -> List[Account]:
         cur = self.conn.cursor()
         cur.execute("SELECT * FROM accounts_kaisar;")
@@ -65,6 +73,7 @@ class AccountDatabasePostgres(AccountDatabase):
             balance=row["balance"],
         )
 
+
     def get_object(self, id_: UUID) -> Optional[Account]:
         cur = self.conn.cursor()
         cur.execute("SELECT * FROM accounts_kaisar WHERE id = %s;", (str(id_),))
@@ -73,19 +82,7 @@ class AccountDatabasePostgres(AccountDatabase):
         if len(data) == 0:
             raise ObjectNotFound("Postgres: Object not found")
         cols = [x[0] for x in cur.description]
-        # This is the implementation without Pandas
-        # for i in range(len(cols)):
-        #     if str(cols[i]) == "id":
-        #         account_id = data[0][i]
-        #     if str(cols[i]) == "balance":
-        #         account_balance = data[0][i]
-        #     if str(cols[i]) == "currency":
-        #         account_currency = data[0][i]
-        # return Account(
-        #     id_=UUID(account_id),
-        #     balance=account_balance,
-        #     currency=account_currency,
-        # )
+
 
         df = pd.DataFrame(data, columns=cols)
         return self.pandas_row_to_account(row=df.iloc[0])

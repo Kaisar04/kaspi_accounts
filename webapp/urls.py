@@ -18,7 +18,7 @@ from django.urls import path
 from webapp import views
 
 urlpatterns = [
-    path('', views.index),
-    path('accounts/', views.accounts_list),
+    # path('', views.index),
+    path('', views.accounts_list),
     path('api/accounts/', views.accounts),
 ]

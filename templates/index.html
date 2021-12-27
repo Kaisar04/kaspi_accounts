@@ -12,8 +12,8 @@
     <tr onclick="window.location='/accounts/{{account.id_}}'">
         <td>{{account.id_}}</td>
         <td
-            {% if account.balance < 300 %}
-                class = "table-danger"
+            {% if account.balance >= max_balance %}
+                class = "table-success"
             {% endif %}
         >{{account.balance}}</td>
         <td>{{account.currency}}</td>
@@ -21,14 +21,15 @@
     {% endfor %}
 </table>
 <h3>Открыть новый счёт</h3>
-<form method="POST">
-       <select >
+<form action="" method="POST">
+<!--    {% csrf_token %}-->
+    <select name="currency">
         <option selected="selected" disabled>Выберите валюту:</option>
         <option value="KZT">KZT</option>
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
-       </select>
-       <input type="submit" value="Добавить счёт">
+    </select>
+    <input type="submit" value="Добавить счёт" onclick="return alert('Успешно добавлено')">
 </form>
 </body>
 </html>

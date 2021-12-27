@@ -9,25 +9,25 @@ from django.shortcuts import render
 from account.account import Account
 from database.database import ObjectNotFound
 from database.implementations.postgres_db import AccountDatabasePostgres
-from database.implementations.ram import AccountDatabaseRAM
 
 dbname: str = "postgres"
-if dbname == "":
-    database = AccountDatabaseRAM()
-    print("Using RAM")
-else:
-    port: int = 5432
-    user: str = "postgres"
-    print(user)
-    password: str = "10011000Ks"
-    host: str = "localhost"
-    connection_str = f"dbname={dbname} port={port} user={user} password={password} host={host}"
-    database = AccountDatabasePostgres(connection=connection_str)
+port: int = 5432
+user: str = "postgres"
+print(user)
+password: str = "10011000Ks"
+host: str = "localhost"
+connection_str = f"dbname={dbname} port={port} user={user} password={password} host={host}"
+database = AccountDatabasePostgres(connection=connection_str)
 
 
 def accounts_list(request: HttpRequest) -> HttpResponse:
+    max_balance = database.max_value()
     accounts = database.get_objects()
-    return render(request, "index.html", context={"accounts": accounts})
+    if request.method == "POST":
+            account = Account.fill_spaces(request.body.decode("utf8"))
+            database.save(account)
+            accounts = database.get_objects()
+    return render(request, "index.html", context={"accounts": accounts, "max_balance": max_balance})
 
 
 def index(request: HttpRequest) -> HttpResponse:

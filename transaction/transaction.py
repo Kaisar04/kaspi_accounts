@@ -12,3 +12,5 @@ class Transaction():
     balance_netto: Decimal
     currency: str
     status: str
+
+

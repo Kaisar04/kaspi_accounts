@@ -34,6 +34,14 @@ class Account:
         return json.dumps(self.to_json())
 
     @classmethod
+    def fill_spaces(cls, inp: str):
+        return cls(
+            id_=uuid4(),
+            currency=inp[9:],
+            balance=0,
+        )
+
+    @classmethod
     def from_json_str(cls, json_str: str) -> "Account":  # Factory
         obj = json.loads(json_str)
         assert "currency" in obj
