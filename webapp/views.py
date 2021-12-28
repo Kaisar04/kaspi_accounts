@@ -30,6 +30,10 @@ def accounts_list(request: HttpRequest) -> HttpResponse:
     return render(request, "index.html", context={"accounts": accounts, "max_balance": max_balance})
 
 
+def account_detail(request: HttpRequest, pk):
+    account = database.get_object(id_=pk)
+    return render(request, "account_detail.html", context={"account": account})
+
 def index(request: HttpRequest) -> HttpResponse:
     return HttpResponse(content="""
     <html>
