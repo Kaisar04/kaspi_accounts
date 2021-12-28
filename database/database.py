@@ -4,6 +4,7 @@ from typing import List
 from uuid import UUID
 
 from account.account import Account
+from transaction.transaction import Transaction
 
 
 class ObjectNotFound(ValueError):

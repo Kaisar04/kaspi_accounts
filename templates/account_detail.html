@@ -14,5 +14,26 @@
         <td>{{account.currency}}</td>
     </tr>
 <table class="table table-hover" style="margin: 1em">
+
+<h1>Транзакций</h1>
+<table class="table table-hover" style="margin: 1em">
+    {% for transaction in transactions %}
+    <tr onclick="window.location='/accounts/{{account.id_}}'">
+        <td><a href="{% url 'account_detail' pk=account.id_ %}">{{account.id_}}</a></td>
+        <td>{{transaction.id_}}</td>
+        <td>{{transaction.account_id}}</td>
+        <td>{{transaction.balance}}</td>
+        <td>{{transaction.currency}}</td>
+    </tr>
+    {% endfor %}
+<table class="table table-hover" style="margin: 1em">
+
+<h3>Пополнение</h3>
+<form action="" method="POST">
+    <input type="number", name="balance">
+    <input type="submit" value="Submit">
+</form>
+
+
 </body>
 </html>

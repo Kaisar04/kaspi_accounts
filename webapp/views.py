@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 from uuid import uuid4
 
 from django.http import HttpResponse, HttpRequest
@@ -9,6 +10,7 @@ from django.shortcuts import render
 from account.account import Account
 from database.database import ObjectNotFound
 from database.implementations.postgres_db import AccountDatabasePostgres
+from transaction.transaction import Transaction
 
 dbname: str = "postgres"
 port: int = 5432
@@ -32,7 +34,24 @@ def accounts_list(request: HttpRequest) -> HttpResponse:
 
 def account_detail(request: HttpRequest, pk):
     account = database.get_object(id_=pk)
-    return render(request, "account_detail.html", context={"account": account})
+    transactions = database.get_tran_by_account_id(account_id=account.id_)
+    if request.method == "POST":
+        balance = Decimal(request.POST.get("balance", 0))
+        account = database.get_object(id_=pk)
+        account.balance += balance
+        database.save(account)
+        transaction = Transaction(
+            id_=uuid4(),
+            account_id=account.id_,
+            balance=balance,
+            currency=account.currency,
+            status="Completed",
+        )
+        database.save_trans(transaction=transaction)
+    transactions = database.get_tran_by_account_id(account_id=account.id_)
+    print(transactions)
+    return render(request, "account_detail.html", context={"account": account, "transactions": transactions})
+
 
 def index(request: HttpRequest) -> HttpResponse:
     return HttpResponse(content="""
@@ -73,3 +92,10 @@ def accounts(request: HttpRequest) -> HttpResponse:
             return HttpResponse(content="OK", status=200)
         except Exception as e:
             return HttpResponse(content=f"Error: {e}", status=400)
+
+
+# def deposit(request: HttpRequest, pk, amount) -> HttpResponse:
+#     account = database.get_object(id_=pk)
+#     account.balance = account.balance + amount
+#     database.save(account)
+#     return render(request, "account_detail.html", context={"account": account})
